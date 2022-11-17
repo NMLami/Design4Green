@@ -129,49 +129,6 @@
 </head>
 
 <body>
-    <!-- 
-<h2>Green Chiffrera</h2>
-
-<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
-
-<table id="myTable">
-  <tr class="header">
-    <th style="width:60%;">Name</th>
-    <th style="width:40%;">Country</th>
-  </tr>
-  <tr>
-    <td>Alfreds Futterkiste</td>
-    <td>Germany</td>
-  </tr>
-  <tr>
-    <td>Berglunds snabbkop</td>
-    <td>Sweden</td>
-  </tr>
-  <tr>
-    <td>Island Trading</td>
-    <td>UK</td>
-  </tr>
-  <tr>
-    <td>Koniglich Essen</td>
-    <td>Germany</td>
-  </tr>
-  <tr>
-    <td>Laughing Bacchus Winecellars</td>
-    <td>Canada</td>
-  </tr>
-  <tr>
-    <td>Magazzini</td>
-    <td>Italy</td>
-  </tr>
-  <tr>
-    <td>North/South</td>
-    <td>UK</td>
-  </tr>
-  <tr>
-    <td>Paris specialites</td>
-    <td>France</td>
-  </tr>
-</table> -->
 <div>
     <nav class="navbar navbar-light bg-light justify-content-between">
         <a class="navbar-brand">D4G</a>
@@ -228,15 +185,6 @@
         <div class="search">
             <div class="row">
                 <div class="col-md-3">
-                    <!-- <div class="dropdown">
-                        <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
-                        Continuing / initial training
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-light bx bx-search-alt" aria-labelledby="dropdownMenuButton2">
-                          <li><a class="dropdown-item active" href="#">Continuing Education </a></li>
-                          <li><a class="dropdown-item" href="#">Initial training</a></li>
-                        </ul>
-                      </div> -->
                       <select style="border: 0; outline:0 ;padding-bottom: 1.3pc ;" class=" search-1" name="continuingOrInitialTraining search-1" id = "continuingOrInitital"required onclick="searchCourses()">
                         <option value=" " > Continuing / initial training</option>
                         <option value="Continuing Education">Continuing Education</option>
@@ -244,8 +192,39 @@
                       </select>
                 </div>
                 <div class="col-md-3">
-                    <div class="search-1"> <i class='bx bx-search-alt'></i> <input type="text"
-                            placeholder="Location"> </div>
+                    <select style="border: 0; outline:0 ;padding-bottom: 1.3pc ;" class=" search-1" name="location search-1" id = "location"required onclick="searchCourses()">
+                        <option value=" " > Choose Location</option>
+                        <option value="National">National(USA)</option>
+                        <option value="Toulouse">Toulouse(FRA)</option>
+                        <option value="Boulogne-Billancourt<">Boulogne-Billancourt(FRA)</option>
+                        <option value="Paris">Paris(FRA)</option>
+                        <option value="All of France">All of France</option>
+                        <option value="La Bernardière">La Bernardière(FRA)</option>
+                        <option value="Versailles">Versailles(FRA)</option>
+                        <option value="Puteaux-La défense">Puteaux-La défense(FRA)</option>
+                        <option value="Saint-Barthélemy d'Anjou">Saint-Barthélemy d'Anjou(FRA)</option>
+                        <option value="Anglet">Anglet(FRA)</option>
+                        <option value="Rouen">Rouen(FRA)</option>
+                        <option value="Bordeaux">Bordeaux(FRA)</option>
+                        <option value="Lille">Lille(FRA)</option>
+                        <option value="Évry">Évry(FRA)</option>
+                        <option value="La Rochelle">La Rochelle(FRA)</option>
+                        <option value="Albi">Albi(FRA)</option>
+                        <option value="Montpellier">Montpellier(FRA)</option>
+                        <option value="Ales">Ales(FRA)</option>
+                        <option value="Saint-Étienne">Saint-Étienne(FRA)</option>
+                        <option value="Nantes">Nantes(FRA)</option>
+                        <option value="Levallois-Perret">Levallois-Perret(FRA)</option>
+                        <option value="Mulhouse">Mulhouse(FRA)</option>
+                        <option value="Pontoise">Pontoise(FRA)</option>
+                        <option value="SAINT MALO">SAINT MALOFRA)</option>
+                        <option value="Lyon">Lyon(FRA)</option>
+                        <option value="Rouen">Rouen(FRA)</option>
+                        <option value="Rennes">Rennes(FRA)</option>
+                        <option value="Saint-Etienne-de-Montluc">Saint-Etienne-de-Montluc(FRA)</option>
+                        <option value="Morlaix">Morlaix(FRA)</option>
+                        <option value="Lyon">Lyon(FRA)</option>
+                      </select>
                 </div>
 
                 <div class="col-md-3">
@@ -1628,10 +1607,17 @@ var demo = document.getElementById("demo");
 
     let final_data = [];
 
-    if(resultData.length>0){
+    if(resultData.length > 0 && resultData[0] != -1){
         final_data = resultData;
-    }else final_data =sheet_data;
- 
+    }else if(resultData[0] == -1){ // search empty
+        final_data =[];
+    }
+    else final_data =sheet_data;
+    console.log("final_data", final_data)
+    if( final_data.length <= 0){
+        document.getElementsByClassName('show-data')[0].innerHTML = `<h1>No result Found</h1>`;
+       
+    }else{
     // creates a <table> element and a <tbody> element
     const tbl = document.createElement("table");
   
@@ -1664,7 +1650,7 @@ var demo = document.getElementById("demo");
     
 ///
     const cellh4 = document.createElement("td");
-    const cellTexth4 = document.createTextNode(` abs`);
+    const cellTexth4 = document.createTextNode(` wishlist`);
 
     cellh4.appendChild(cellTexth4);
     header.appendChild(cellh4);
@@ -1735,6 +1721,7 @@ var demo = document.getElementById("demo");
     tbl.setAttribute("border", "2");
     tbl.setAttribute("align", "center");
     tbl.setAttribute("id", "tableId");
+    }
   }
  
   
@@ -1793,19 +1780,51 @@ var demo = document.getElementById("demo");
 
 function searchCourses(){
     const continueOrInitial = document.getElementById('continuingOrInitital').value;
+    const location = document.getElementById('location').value;
+    console.log(location ,continueOrInitial)
     let filteredCourse = [];
+    let reFilterCourse = [];
 
     if(continueOrInitial !== " "){
+        if(filteredCourse.length <= 0){
         for(i=0 ; i< sheet_data.length; i++){
-            if(sheet_data[i].continuingOrInitialTraining.includes(continueOrInitial)){
+            if(sheet_data[i].continuingOrInitialTraining && sheet_data[i].continuingOrInitialTraining.includes(continueOrInitial)){
                 filteredCourse.push(sheet_data[i]);
             }
         }
+    }else{
+        for(i=0 ; i< filteredCourse.length; i++){
+            if(filteredCourse[i].continuingOrInitialTraining && filteredCourse[i].continuingOrInitialTraining.includes(continueOrInitial)){
+                reFilterCourse.push(filteredCourse[i]);
+            }
+         }
+         filteredCourse = reFilterCourse;
+         reFilterCourse = [];
     }
-   
+    }
+    console.log(filteredCourse);
+   if(location !== " "){
+    console.log(location);
+        if(filteredCourse.length <= 0){
+        for(i=0 ; i< sheet_data.length; i++){
+            if(sheet_data[i].location && sheet_data[i].location.includes(location)){
+                filteredCourse.push(sheet_data[i]);
+            }
+        }
+    }else{
+        for(i=0 ; i< filteredCourse.length; i++){
+            if(filteredCourse[i].location && filteredCourse[i].location.includes(location)){
+                reFilterCourse.push(filteredCourse[i]);
+            }
+         }
+         filteredCourse = reFilterCourse;
+         reFilterCourse = [];
+    }
+    }
+    console.log(filteredCourse.length)
         if(filteredCourse.length>0){
             generateTable(filteredCourse);
-        }else generateTable([])
+        }else generateTable([-1])
    
 }
 
