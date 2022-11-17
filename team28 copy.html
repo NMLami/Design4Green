@@ -1,4 +1,301 @@
-var a = [
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css"
+        integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.2/dist/leaflet.js"
+        integrity="sha256-o9N1jGDZrf5tS+Ft4gbIK7mYMipq9lqpVJ91xHSyKhg=" crossorigin=""></script>  
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+
+    
+        body {
+            background-image: linear-gradient(to right top, #D91B23, #124FEB);
+            height: 100vh;
+            display: block;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #tableId{
+          margin: auto;
+          background-color: blanchedalmond;
+          border: 2px solid black;
+           border-collapse: collapse;
+        }
+        .search {
+            background-color: #fff;
+            padding: 4px;
+            border-radius: 5px
+        }
+
+        .search-1 {
+            position: relative;
+            width: 100%
+        }
+
+        .search-1 input {
+            height: 45px;
+            border: none;
+            width: 100%;
+            padding-left: 34px;
+            padding-right: 10px;
+            border-right: 2px solid #eee
+        }
+
+        .search-1 input:focus {
+            border-color: none;
+            box-shadow: none;
+            outline: none
+        }
+
+        .search-1 i {
+            position: absolute;
+            top: 12px;
+            left: 5px;
+            font-size: 24px;
+            color: #eee
+        }
+
+        ::placeholder {
+            color: #eee;
+            opacity: 1
+        }
+
+        .search-2 {
+            position: relative;
+            width: 100%
+        }
+
+        .search-2 input {
+            height: 45px;
+            border: none;
+            width: 100%;
+            padding-left: 18px;
+            padding-right: 100px
+        }
+
+        .search-2 input:focus {
+            border-color: none;
+            box-shadow: none;
+            outline: none
+        }
+
+        .search-2 i {
+            position: absolute;
+            top: 12px;
+            left: -10px;
+            font-size: 24px;
+            color: #eee
+        }
+
+        .search-2 button {
+            position: absolute;
+            right: 1px;
+            top: 0px;
+            border: none;
+            height: 45px;
+            background-color: red;
+            color: #fff;
+            width: 90px;
+            border-radius: 4px
+        }
+        
+
+        @media (max-width:800px) {
+            .search-1 input {
+                border-right: none;
+                border-bottom: 1px solid #eee
+            }
+
+            .search-2 i {
+                left: 4px
+            }
+
+            .search-2 input {
+                padding-left: 34px
+            }
+
+            .search-2 button {
+                height: 37px;
+                top: 5px
+            }
+          
+        }
+            .left {
+        left: 0;
+        background-color: rgb(36, 0, 95);
+    }
+    .right {
+        right: 0;
+        background-color: rgb(56, 1, 44);
+    }
+    
+
+            .map-responsive{
+
+    overflow:hidden;
+    padding-bottom:56.25%;
+
+    height:0;
+
+    }
+
+    .map-responsive iframe{
+
+    left:0;
+    top:0;
+    height:100%;
+    width:100%;
+    }
+    </style>
+</head>
+
+<body>
+<div>
+    <nav class="navbar navbar-light bg-light justify-content-between">
+        <a class="navbar-brand">D4G</a>
+        <form class="form-inline">
+            <!-- Button trigger modal -->
+       
+        <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="showCart()">
+            Cart <span class='cart-counter'> 0 </span>
+        </button>
+        </form>
+      </nav>
+    </div>
+
+  
+  <!-- Modal -->
+  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Cart</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+           
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick = sendMail()>Email Send</button>
+          <button type="button" class="btn btn-primary" onclick = genPDF()>PDF</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for details -->
+  <div class="modal fade" id="staticBackdrop1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" >
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">You have selected</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+           
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Understood</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <div class="container" style="margin: 5;">
+        <div class="search">
+            <div class="row">
+                <div class="col-md-3">
+                      <select style="border: 0; outline:0 ;padding-bottom: 1.3pc ;" class=" search-1" name="continuingOrInitialTraining search-1" id = "continuingOrInitital"required onclick="searchCourses()">
+                        <option value=" " > Continuing / initial training</option>
+                        <option value="Continuing Education">Continuing Education</option>
+                        <option value="Initial training">Initial training</option>
+                      </select>
+                </div>
+                <div class="col-md-3">
+                    <select style="border: 0; outline:0 ;padding-bottom: 1.3pc ;" class=" search-1" name="location search-1" id = "location"required onclick="searchCourses()">
+                        <option value=" " > Choose Location</option>
+                        <option value="National">National(USA)</option>
+                        <option value="Toulouse">Toulouse(FRA)</option>
+                        <option value="Boulogne-Billancourt">Boulogne-Billancourt(FRA)</option>
+                        <option value="Paris">Paris(FRA)</option>
+                        <option value="All of France">All of France</option>
+                        <option value="La Bernardière">La Bernardière(FRA)</option>
+                        <option value="Versailles">Versailles(FRA)</option>
+                        <option value="Puteaux-La défense">Puteaux-La défense(FRA)</option>
+                        <option value="Saint-Barthélemy d'Anjou">Saint-Barthélemy d'Anjou(FRA)</option>
+                        <option value="Anglet">Anglet(FRA)</option>
+                        <option value="Rouen">Rouen(FRA)</option>
+                        <option value="Bordeaux">Bordeaux(FRA)</option>
+                        <option value="Lille">Lille(FRA)</option>
+                        <option value="Évry">Évry(FRA)</option>
+                        <option value="La Rochelle">La Rochelle(FRA)</option>
+                        <option value="Albi">Albi(FRA)</option>
+                        <option value="Montpellier">Montpellier(FRA)</option>
+                        <option value="Ales">Ales(FRA)</option>
+                        <option value="Saint-Étienne">Saint-Étienne(FRA)</option>
+                        <option value="Nantes">Nantes(FRA)</option>
+                        <option value="Levallois-Perret">Levallois-Perret(FRA)</option>
+                        <option value="Mulhouse">Mulhouse(FRA)</option>
+                        <option value="Pontoise">Pontoise(FRA)</option>
+                        <option value="SAINT MALO">SAINT MALOFRA)</option>
+                        <option value="Lyon">Lyon(FRA)</option>
+                        <option value="Rouen">Rouen(FRA)</option>
+                        <option value="Rennes">Rennes(FRA)</option>
+                        <option value="Saint-Etienne-de-Montluc">Saint-Etienne-de-Montluc(FRA)</option>
+                        <option value="Morlaix">Morlaix(FRA)</option>
+                        <option value="Lyon">Lyon(FRA)</option>
+                      </select>
+                </div>
+
+                <div class="col-md-3">
+                    <select style="border: 0; outline:0 ;padding-bottom: 1.3pc ;" class=" search-1" name="duration search-1" id = "duration"required onclick="searchCourses()">
+                        <option value=" " > Choose Duration</option>
+                        <option value= 1.5 >1.5</option>
+                        <option value= 0.5>0.5</option>
+                        <option value= 3>3</option>
+                        <option value= 1 >1</option>
+                        <option value= 2>2</option>
+                        <option value= 8>8</option>
+                        <option value= 5>5</option>
+                        <option value= 58>58</option>
+                        <option value= 10.5>10.5</option>
+                      </select>
+                </div>
+
+                <div class="col-md-3">
+                    <div>
+                        <div class="search-2"> <i class='bx bxs-map'></i> <input type="text" onkeyup="searchCourses()" id="nameOfOrganisation"
+                                placeholder="Training Organisation"> <button onclick="generateTable([])">Search</button> </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="show-data">
+            </div>
+            
+            <div id="map" class="map-responsive"></div>
+     </div>
+    
+<!-- scripts -->
+<script>
+ 
+//----------------------------------------All Data------------------------------------
+    var sheet_data = [
     {
      "id": 1,
      "continuingOrInitialTraining": "Continuing Education",
@@ -1337,4 +1634,649 @@ var a = [
      "description": "The \"Information Systems and Social Responsibility\" session is part of a course module on good software development practices. The majority of the module is dedicated to good practices from a programming point of view (design patterns, SOLID principles) but 2 hours are dedicated to digital responsibility.",
      "url": "http:\/\/www.vcharpenay.link\/courses\/num-responsable.html"
     }
-   ]
+   ];
+
+
+    var markers = [
+    {
+      "name":"Paris",
+      "lat": 48.856613,
+      "lng": 2.352222
+    },
+    {
+      "name": "National",
+      "lat": 32.671200,
+      "lng": -117.106308
+    },
+    {
+      "name": "Boulogne-Billancourt",
+      "lat": 48.833830,
+      "lng": 2.243230
+    },
+    {
+        "name": "All of France",
+        "lat": 46.227638,
+        "lng": 2.213749
+    },
+    {
+        "name": "La Bernardière",
+        "lat": 47.050350,
+        "lng": -1.268110
+    },
+    {
+        "name": "Versailles",
+        "lat": 48.804867,
+        "lng": 2.120355
+    },
+    {
+        "name": "Puteaux-La défense",
+        "lat": 48.893470,
+        "lng": 2.240810
+    },
+    {
+        "name": "Saint-Barthélemy d'Anjou",
+        "lat": 47.468890,
+        "lng": -0.495140
+    },
+    {
+        "name": "Anglet",
+        "lat": 43.480358,
+        "lng": -1.515670
+    },
+    {
+        "name": "Rouen",
+        "lat": 49.443233,
+        "lng": 1.099971
+    },
+    {
+        "name": "Bordeaux",
+        "lat": 44.837788,
+        "lng": -0.579180
+    },
+    {
+        "name": "Lille",
+        "lat": 50.629250,
+        "lng": 3.057256
+    },
+    {
+        "name": "Évry",
+        "lat": 48.624748,
+        "lng": 2.430850
+    },
+    {
+        "name": "La Rochelle",
+        "lat": 46.1591126,
+        "lng": -1.1520434
+    },
+    {
+        "name": "Albi",
+        "lat": 43.9277552,
+        "lng": 2.147899
+    },
+    {
+        "name": "Montpellier",
+        "lat": 43.6112422,
+        "lng": 3.8767337
+    },
+    {
+        "name": "Ales",
+        "lat": 39.768245,
+        "lng": 8.815632
+    },
+    {
+        "name": "Saint-Étienne",
+        "lat": 45.4401467,
+        "lng": 4.3873058
+    },
+    {
+        "name": "Nantes",
+        "lat": 47.2186371,
+        "lng": -1.5541362
+    },
+    {
+        "name": "Levallois-Perret",
+        "lat": 48.892956,
+        "lng": 2.2881683
+    },
+    {
+        "name": "Mulhouse",
+        "lat": 47.7467233,
+        "lng": 7.3389937
+    },
+    {
+        "name": "Pontoise",
+        "lat": 49.0508845,
+        "lng": 2.1008067
+    },
+    {
+        "name": "SAINT MALO",
+        "lat": 48.649518,
+        "lng": -2.0260409
+    },
+    {
+        "name": "Lyon",
+        "lat": 45.7578137,
+        "lng": 4.8320114
+    },
+    {
+        "name": "Rouen",
+        "lat": 49.4404591,
+        "lng": 1.0939658
+    },
+    {
+        "name": "Rennes",
+        "lat": 48.1113387,
+        "lng": -1.6800198
+    },
+    {
+        "name": "Saint-Etienne-de-Montluc",
+        "lat": 47.2980648,
+        "lng": -1.7748386
+    },
+    {
+        "name": "Morlaix",
+        "lat": 48.5824932,
+        "lng": -3.8331972
+    }
+  ];
+
+   //Showing The data
+ generateTable = (resultData) => {
+
+    let final_data = [];
+
+    if(resultData.length > 0 && resultData[0] != -1){
+        final_data = resultData;
+    }else if(resultData[0] == -1){ // search empty
+        final_data =[];
+    }else final_data =sheet_data;
+
+    if( final_data.length <= 0){
+        document.getElementsByClassName('show-data')[0].innerHTML = `<h1>No result Found</h1>`;
+       
+    }else{
+
+    mapData(final_data);
+
+    const tbl = document.createElement("table");
+  
+    const tblBody = document.createElement("tbody");
+
+    const header = document.createElement("tr");
+    const cellh = document.createElement("td");
+    const cellTexth = document.createTextNode(`Location`);
+    cellh.setAttribute('class','fs-5 fw-bold')
+
+    cellh.appendChild(cellTexth);
+    header.appendChild(cellh)
+
+    const cellh1 = document.createElement("td");
+    const cellTexth1 = document.createTextNode(`Contuning Or Initial`);
+    cellh1.setAttribute('class','fw-bold')
+
+    cellh1.appendChild(cellTexth1);
+    header.appendChild(cellh1);
+///
+    const cellh2 = document.createElement("td");
+    const cellTexth2 = document.createTextNode(`Organisation Name`);
+    cellh2.setAttribute('class','fw-bold')
+
+    cellh2.appendChild(cellTexth2);
+    header.appendChild(cellh2);
+///
+    const cellh3 = document.createElement("td");
+    const cellTexth3 = document.createTextNode(`Duration`);
+    cellh3.setAttribute('class','fw-bold')
+
+    cellh3.appendChild(cellTexth3);
+    header.appendChild(cellh3);
+    
+///
+    const cellh4 = document.createElement("td");
+    const cellTexth4 = document.createTextNode(`Wishlist`);
+    cellh4.setAttribute('class','fw-bold')
+
+    cellh4.appendChild(cellTexth4);
+    header.appendChild(cellh4);
+    
+
+     tblBody.appendChild(header);
+    //creating all cells
+    for (let i = 0; i < final_data.length; i++) {
+      // creates a table row
+      const row = document.createElement("tr");
+
+        const cell = document.createElement("td");
+        const cellText = document.createTextNode(`${final_data[i].location || "-"}`);
+
+        const cell1 = document.createElement("td");
+        const cellText1 = document.createTextNode(`${final_data[i].continuingOrInitialTraining || "Other"}`);
+
+        const cell2 = document.createElement("td");
+        const cellText2 = document.createTextNode(`${final_data[i].nameOfTheOrganisation || "Other"}`);
+
+        const cell3 = document.createElement("td"); 
+        const cellText3 = document.createTextNode(`${final_data[i].duration || "-"}`);
+
+        const cell4 = document.createElement("button");
+        cell4.setAttribute("id", `${final_data[i].id}`);
+        cell4.setAttribute("name", `${final_data[i].titleOfTheCourse || " "}`);
+        cell4.setAttribute("class", `btn btn-success`);
+      //  const cellValue4 = document.value(`${sheet_data[i].titleOfTheCourse || " "}`);
+        const cellText4 = document.createTextNode(`Cart`);
+
+        //add to cart button.
+        cell4.addEventListener('click', function handleclick(e) {
+            const courseId = e.target.id;
+            const courseName = e.target.name;
+            addtoCart(courseId, courseName);
+        });
+        //const cellText3 = document.createTextNode("<br>"+`--------------`);
+        //,${sheet_data[j].titleOfTheCourse}, ${sheet_data[i].location}
+        //const cellText = document.createTextNode(`cell in row ${sheet_data[i].location}, column ${sheet_data[j]}`);
+        cell.appendChild(cellText);
+        cell1.appendChild(cellText1);
+        cell2.appendChild(cellText2);
+        cell3.appendChild(cellText3);
+        cell4.appendChild(cellText4);
+       // cell4.appendChild(cellValue4);
+
+        row.appendChild(cell);
+        row.appendChild(cell1);
+        row.appendChild(cell2);
+        row.appendChild(cell3);
+        row.appendChild(cell4);
+       //}
+
+      // add the row to the end of the table body
+      tblBody.appendChild(row);
+   }
+
+    // put the <tbody> in the <table>
+    tbl.appendChild(tblBody);
+    // appends <table> into <body>
+    document.getElementsByClassName('show-data')[0].innerText = ""
+    document.getElementsByClassName('show-data')[0].appendChild(tbl)
+    //document.body.appendChild(tbl);
+    // sets the border attribute of tbl to '2'
+    tbl.setAttribute("border", "2");
+    tbl.setAttribute("align", "center");
+    tbl.setAttribute("id", "tableId");
+    }
+  }
+ 
+  
+  function showCart() {
+    //reset modal values
+    document.getElementsByClassName('modal-body')[0].innerHTML = '' ;
+    const cartContents = JSON.parse(getDb());
+    console.log(cartContents,1111111111);
+
+    const tbl = document.createElement("table");
+  
+  const tblBody = document.createElement("tbody");
+
+//creating all cells
+    for (let i = 0; i < Object.keys(cartContents).length; i++) {
+      // creates a table row
+    
+      const row = document.createElement("tr");
+      const cell = document.createElement("td");
+      const cellText = document.createTextNode(`${Object.values(cartContents)[i] || 0 }`);
+    
+     const cell1 = document.createElement("button");
+     cell1.setAttribute("id", `${Object.keys(cartContents)[i]}`);
+     //class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+     cell1.setAttribute("class", `btn btn-outline-dark`);
+     cell1.setAttribute("data-bs-toggle","modal");
+     cell1.setAttribute("data-bs-target","#staticBackdrop1");
+     //  const cellValue4 = document.value(`${sheet_data[i].titleOfTheCourse || " "}`);
+       const cellText1 = document.createTextNode(`details`);
+
+        //add to cart button.
+        cell1.addEventListener('click', function handleclick(e) {
+            const courseId = e.target.id;
+            showDetails(courseId);
+        });
+
+        const cell2 = document.createElement("button");
+       cell2.setAttribute("id", `${Object.keys(cartContents)[i]}`);
+       const cellText2 = document.createTextNode(`remove`);
+       cell2.setAttribute("class", `btn btn-outline-dark`);
+        //delete to cart button.
+        cell2.addEventListener('click', function handleclick(e) {
+            const courseId = e.target.id;
+            removeFromDb(courseId);
+        });
+
+
+        cell.appendChild(cellText);
+         cell1.appendChild(cellText1);
+         cell2.appendChild(cellText2);
+
+        row.appendChild(cell);
+       row.appendChild(cell1);
+       row.appendChild(cell2);
+
+//       // add the row to the end of the table body
+      tblBody.appendChild(row);
+  }
+
+//     // put the <tbody> in the <table>
+    tbl.appendChild(tblBody);
+//     // appends <table> into <body>
+    document.getElementsByClassName('modal-body')[0].appendChild(tbl);
+//     // sets the border attribute of tbl to '2'
+    
+    tbl.setAttribute("align", "center");
+    tbl.setAttribute("id", "tableId");
+}
+
+function searchCourses(){
+    const continueOrInitial = document.getElementById('continuingOrInitital').value;
+    const location = document.getElementById('location').value;
+    const duration = document.getElementById('duration').value;
+    const nameOfOrganisation = document.getElementById('nameOfOrganisation').value;
+
+    console.log(location ,continueOrInitial, duration, nameOfOrganisation)
+
+    let filteredCourse = [];
+    let reFilterCourse = [];
+    let flag =0 ;
+
+    if(continueOrInitial !== " "){
+        if(filteredCourse.length <= 0){
+        for(i=0 ; i< sheet_data.length; i++){
+            if(sheet_data[i].continuingOrInitialTraining && sheet_data[i].continuingOrInitialTraining.includes(continueOrInitial)){
+                filteredCourse.push(sheet_data[i]);
+            }
+        }
+    }else{
+        reFilterCourse = [];
+        for(i=0 ; i< filteredCourse.length; i++){
+            if(filteredCourse[i].continuingOrInitialTraining && filteredCourse[i].continuingOrInitialTraining.includes(continueOrInitial)){
+                console.log(11111111111111)
+                reFilterCourse.push(filteredCourse[i]);
+            }
+         }
+         if(reFilterCourse.length == 0){
+            flag=1;
+         }
+         filteredCourse = reFilterCourse;
+         reFilterCourse = [];
+    }
+    }
+
+    console.log("filteredCourse 1", filteredCourse)
+
+   if(location !== " "){
+        if(filteredCourse.length <= 0){
+        for(i=0 ; i< sheet_data.length; i++){
+            if(sheet_data[i].location && sheet_data[i].location.includes(location)){
+                filteredCourse.push(sheet_data[i]);
+            }
+        }
+    }else{
+        reFilterCourse = [];
+        for(i=0 ; i< filteredCourse.length; i++){
+            if(filteredCourse[i].location && filteredCourse[i].location.includes(location)){
+                reFilterCourse.push(filteredCourse[i]);
+            }
+         }
+         
+         if(reFilterCourse.length == 0){ // if result is zero then  no result
+            flag=1;
+         }
+
+         filteredCourse = reFilterCourse;
+         reFilterCourse = [];
+    }
+    }
+
+
+    if(duration !== " "){
+   
+        if(filteredCourse.length <= 0){
+        for(i= 0 ; i< sheet_data.length; i++){
+            if(sheet_data[i].duration && sheet_data[i].duration == duration){
+                filteredCourse.push(sheet_data[i]);
+            }
+        }
+    }else{
+        reFilterCourse = [];
+        for(i=0 ; i< filteredCourse.length; i++){
+            if(filteredCourse[i].duration && filteredCourse[i].duration == duration){
+                reFilterCourse.push(filteredCourse[i]);
+            }
+         }
+         if(reFilterCourse.length == 0){ // if result is zero then  no result
+            flag=1;
+         }
+         filteredCourse = reFilterCourse;
+         reFilterCourse = [];
+    }
+    }
+
+   console.log(nameOfOrganisation)
+    if(nameOfOrganisation !== ""){
+        if(filteredCourse.length <= 0){
+        for(i=0 ; i< sheet_data.length; i++){
+            if(sheet_data[i].nameOfTheOrganisation && sheet_data[i].nameOfTheOrganisation.includes(nameOfOrganisation)){
+                filteredCourse.push(sheet_data[i]);
+            }
+        }
+    }else{
+        reFilterCourse = [];
+        for(i=0 ; i< filteredCourse.length; i++){
+            if(filteredCourse[i].nameOfTheOrganisation && filteredCourse[i].nameOfTheOrganisation.includes(nameOfOrganisation)){
+                reFilterCourse.push(filteredCourse[i]);
+            }
+         }
+         
+         if(reFilterCourse.length == 0){ // if result is zero then  no result
+            flag=1;
+         }
+
+         filteredCourse = reFilterCourse;
+         reFilterCourse = [];
+    }
+    }
+
+    
+    console.log(flag);
+    if(flag == 1) generateTable([-1])
+    else if(flag == 0 && filteredCourse.length>0){
+            generateTable(filteredCourse);
+    }else(generateTable([-1]))
+   
+}
+
+
+  //for map
+  function mapData(data) {
+    
+    var container = L.DomUtil.get('map');
+      if(container != null){
+        container._leaflet_id = null;
+      }
+
+    var map = L.map('map', {
+        center: [20.0, 5.0],
+        minZoom: 2,
+        zoom: 3
+    });
+ 
+    L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        subdomains: ['a', 'b', 'c']
+    }).addTo(map);
+
+    for (var i = 0; i < data.length; i++) { //loop for place
+            var place = data[i].location;
+       // console.log("sajdsakj",place)
+     
+        for(coordinate of markers){
+            
+            if(coordinate.name == place){
+                //console.log(coordinate.name)
+                longitude = coordinate.lng
+                latitude = coordinate.lat
+                
+                L.marker([latitude, longitude])
+                    // .bindPopup('<a href="' + markers[i].url + '" target="_blank" rel="noopener">' + markers[i].name + '</a>')
+                    .addTo(map);
+
+            }
+        }
+            // for (var i = 0; i < markers.length; ++i) {
+            //     L.marker([markers[i].lat, markers[i].lng])
+            //         // .bindPopup('<a href="' + markers[i].url + '" target="_blank" rel="noopener">' + markers[i].name + '</a>')
+            //         .addTo(map);
+            // };
+            
+
+        }
+       
+       
+    }
+    
+function showDetails(id){
+    
+    for(i=0;i< sheet_data.length;i++){
+        if(sheet_data[i].id == id){ //something is string here find before submitting ===
+            var div = document.createElement('div');
+
+            div.innerHTML = `
+            <b>Course Name:</b>  ${sheet_data[i].titleOfTheCourse }<br> 
+            <b>Continuing / initial training:</b> ${sheet_data[i].continuingOrInitialTraining || "Unavailable" } <br> 
+            <b>Name of the department / training unit :</b> ${sheet_data[i].nameOfTheOrganisation || "Unavailable" } <br> 
+            <b>Cycle de formation :</b> ${sheet_data[i].cycleDeFormation || "Unavailable" } <br> 
+            The programme covers / Objective : <b>${sheet_data[i].programCovers || "Unavailable" }</b> <br> 
+            <b>Short description of the programme / Content :</b> ${sheet_data[i].description || "Unavailable" } <br> 
+            <b> Type of organisation :</b> ${sheet_data[i].typeOfOrganisation || "Unavailable" } <br> 
+            <b> Name of the organisation :</b> ${sheet_data[i].nameOfTheOrganisation || "Unavailable" } <br> 
+            <b>Location of the structure (city) : </b> ${sheet_data[i].location || "Unavailable" } <br> 
+            <b> Does this training lead to a validation of prior learning :</b> ${sheet_data[i].priorLearning || "Unavailable" } <br> 
+            <b> Duration of training / intervention (in days)  :</b> ${sheet_data[i].duration || "Unavailable" } <br> 
+            <b>Methods of access to training (face-to-face / distance / hybrid)  :</b> ${sheet_data[i].methodOfAccess || "Unavailable" } <br> 
+            <b>URL  : </b>${sheet_data[i].url || "Unavailable" } <br> 
+                `;
+            document.getElementsByClassName('modal-body')[1].innerText = '';
+            document.getElementsByClassName('modal-body')[1].appendChild(div);
+
+        }
+    }
+}
+
+
+function sendMail() {
+ const contents = JSON.parse(getDb());
+
+ if(Object.keys(contents) && Object.keys(contents).length > 0){
+
+    Email.send({
+    Host : "smtp.elasticemail.com",
+    Username : "nafilmahmud@iut-dhaka.edu",
+    Password : "FE2AECDBFE2FD5AC2C86A907CD76E20417C0",
+    To : 'nafillami@gmail.com',
+    From : "nafilmahmud@iut-dhaka.edu",
+    Subject : "Test email",
+    Body : "<html><h2>Header</h2><strong>Bold text</strong><br></br><em>Italic</em></html>"
+}).then(
+  message => alert(message)
+);
+
+    }
+}
+
+
+  function addtoCart(id, name) {
+  const exists = getDb();
+  let course_cart = {};
+  if (exists) {
+    course_cart = JSON.parse(exists);
+    if (!course_cart[id]) {
+        course_cart[id ] = name;
+    }
+  }
+  else {
+    course_cart[id] = name;
+    }
+  updateDb(course_cart);
+
+}
+
+const updateDb = cart => {
+  localStorage.setItem('course_cart', JSON.stringify(cart));
+}
+
+const removeFromDb = id => {
+  const exists = getDb();
+  if (!exists) {
+
+  }
+  else {
+    const course_cart = JSON.parse(exists);
+    delete course_cart[id];
+    updateDb(course_cart);
+    showCart()
+  }
+}   
+
+const getDb = () => localStorage.getItem('course_cart') || 0;
+
+const getStoredCart = () => {
+  const exists = getDb();
+  return exists ? JSON.parse(exists) : {};
+}
+
+const clearTheCart = () => {
+  localStorage.removeItem('course_cart');
+}
+
+document.addEventListener("click", function(){
+   //create variable
+
+   var counts = Object.keys(JSON.parse(getDb())).length || 0;
+     var x= document.getElementsByClassName("cart-counter")[0].innerHTML =`${JSON.parse(counts)}`;
+   
+
+})
+
+window.onload = function(){
+    var counts = Object.keys(JSON.parse(getDb())).length || 0;
+    var x= document.getElementsByClassName("cart-counter")[0].innerHTML =`${JSON.parse(counts)}`;
+  
+}
+
+function genPDF() {
+
+    let mywindow = window.open('', 'PRINT', 'height=650,width=900,top=100,left=150');
+         const contents = JSON.parse(getDb());
+        mywindow.document.write(`<html><head><title>Design For Green </title>`);
+        mywindow.document.write(`</head><body style="align :center;"> YOU have Ordered`);
+          for(i=0; i < Object.keys(contents).length; i++){
+            mywindow.document.write(` ${Object.values(contents)[i]} <br>`)
+            
+        }
+        mywindow.document.write('</body></html>');
+
+        mywindow.document.close(); // necessary for IE >= 10
+        mywindow.focus(); // necessary for IE >= 10*/
+
+        mywindow.print();
+        mywindow.close();
+
+        return true;
+
+        
+    }
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+<script src="https://smtpjs.com/v3/smtp.js"></script>
+    
+
+</body>
+
+</html>

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css"
+        integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.2/dist/leaflet.js"
+        integrity="sha256-o9N1jGDZrf5tS+Ft4gbIK7mYMipq9lqpVJ91xHSyKhg=" crossorigin=""></script>  
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+
+        body {
+            background-image: linear-gradient(to right top, #D91B23, #124FEB);
+            height: 100vh;
+            display: block;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #tableId{
+          margin: auto;
+          background-color: blanchedalmond;
+          border: 2px solid black;
+           border-collapse: collapse;
+        }
+        .search {
+            background-color: #fff;
+            padding: 4px;
+            border-radius: 5px
+        }
+
+        .search-1 {
+            position: relative;
+            width: 100%
+        }
+
+        .search-1 input {
+            height: 45px;
+            border: none;
+            width: 100%;
+            padding-left: 34px;
+            padding-right: 10px;
+            border-right: 2px solid #eee
+        }
+
+        .search-1 input:focus {
+            border-color: none;
+            box-shadow: none;
+            outline: none
+        }
+
+        .search-1 i {
+            position: absolute;
+            top: 12px;
+            left: 5px;
+            font-size: 24px;
+            color: #eee
+        }
+
+        ::placeholder {
+            color: #eee;
+            opacity: 1
+        }
+
+        .search-2 {
+            position: relative;
+            width: 100%
+        }
+
+        .search-2 input {
+            height: 45px;
+            border: none;
+            width: 100%;
+            padding-left: 18px;
+            padding-right: 100px
+        }
+
+        .search-2 input:focus {
+            border-color: none;
+            box-shadow: none;
+            outline: none
+        }
+
+        .search-2 i {
+            position: absolute;
+            top: 12px;
+            left: -10px;
+            font-size: 24px;
+            color: #eee
+        }
+
+        .search-2 button {
+            position: absolute;
+            right: 1px;
+            top: 0px;
+            border: none;
+            height: 45px;
+            background-color: red;
+            color: #fff;
+            width: 90px;
+            border-radius: 4px
+        }
+        
+
+        @media (max-width:800px) {
+            .search-1 input {
+                border-right: none;
+                border-bottom: 1px solid #eee
+            }
+
+            .search-2 i {
+                left: 4px
+            }
+
+            .search-2 input {
+                padding-left: 34px
+            }
+
+            .search-2 button {
+                height: 37px;
+                top: 5px
+            }
+          
+        }
+            .left {
+        left: 0;
+        background-color: rgb(36, 0, 95);
+    }
+    .right {
+        right: 0;
+        background-color: rgb(56, 1, 44);
+    }
+    
+
+            .map-responsive{
+
+    overflow:hidden;
+    padding-bottom:56.25%;
+
+    height:0;
+
+    }
+
+    .map-responsive iframe{
+
+    left:0;
+    top:0;
+    height:100%;
+    width:100%;
+    }
+    </style>
+</head>
+
+<body>
+<div>
+    <nav class="navbar navbar-light bg-light justify-content-between">
+        <a class="navbar-brand">D4G</a>
+        <form class="form-inline">
+            <!-- Button trigger modal -->
+       
+        <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="showCart()">
+            Cart <span class='cart-counter'> 0 </span>
+        </button>
+        </form>
+      </nav>
+    </div>
+
+  
+  <!-- Modal -->
+  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Cart</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+           
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick = sendMail()>Email Send</button>
+          <button type="button" class="btn btn-primary" onclick = genPDF()>PDF</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for details -->
+  <div class="modal fade" id="staticBackdrop1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" >
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">You have selected</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+           
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Understood</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <div class="container" style="margin: 5;">
+        <div class="search">
+            <div class="row">
+                <div class="col-md-3">
+                      <select style="border: 0; outline:0 ;padding-bottom: 1.3pc ;" class=" search-1" name="continuingOrInitialTraining search-1" id = "continuingOrInitital"required onclick="searchCourses()">
+                        <option value=" " > Continuing / initial training</option>
+                        <option value="Continuing Education">Continuing Education</option>
+                        <option value="Initial training">Initial training</option>
+                      </select>
+                </div>
+                <div class="col-md-3">
+                    <select style="border: 0; outline:0 ;padding-bottom: 1.3pc ;" class=" search-1" name="location search-1" id = "location"required onclick="searchCourses()">
+                        <option value=" " > Choose Location</option>
+                        <option value="National">National(USA)</option>
+                        <option value="Toulouse">Toulouse(FRA)</option>
+                        <option value="Boulogne-Billancourt">Boulogne-Billancourt(FRA)</option>
+                        <option value="Paris">Paris(FRA)</option>
+                        <option value="All of France">All of France</option>
+                        <option value="La Bernardière">La Bernardière(FRA)</option>
+                        <option value="Versailles">Versailles(FRA)</option>
+                        <option value="Puteaux-La défense">Puteaux-La défense(FRA)</option>
+                        <option value="Saint-Barthélemy d'Anjou">Saint-Barthélemy d'Anjou(FRA)</option>
+                        <option value="Anglet">Anglet(FRA)</option>
+                        <option value="Rouen">Rouen(FRA)</option>
+                        <option value="Bordeaux">Bordeaux(FRA)</option>
+                        <option value="Lille">Lille(FRA)</option>
+                        <option value="Évry">Évry(FRA)</option>
+                        <option value="La Rochelle">La Rochelle(FRA)</option>
+                        <option value="Albi">Albi(FRA)</option>
+                        <option value="Montpellier">Montpellier(FRA)</option>
+                        <option value="Ales">Ales(FRA)</option>
+                        <option value="Saint-Étienne">Saint-Étienne(FRA)</option>
+                        <option value="Nantes">Nantes(FRA)</option>
+                        <option value="Levallois-Perret">Levallois-Perret(FRA)</option>
+                        <option value="Mulhouse">Mulhouse(FRA)</option>
+                        <option value="Pontoise">Pontoise(FRA)</option>
+                        <option value="SAINT MALO">SAINT MALOFRA)</option>
+                        <option value="Lyon">Lyon(FRA)</option>
+                        <option value="Rouen">Rouen(FRA)</option>
+                        <option value="Rennes">Rennes(FRA)</option>
+                        <option value="Saint-Etienne-de-Montluc">Saint-Etienne-de-Montluc(FRA)</option>
+                        <option value="Morlaix">Morlaix(FRA)</option>
+                        <option value="Lyon">Lyon(FRA)</option>
+                      </select>
+                </div>
+
+                <div class="col-md-3">
+                    <select style="border: 0; outline:0 ;padding-bottom: 1.3pc ;" class=" search-1" name="duration search-1" id = "duration"required onclick="searchCourses()">
+                        <option value=" " > Choose Duration</option>
+                        <option value= 1.5 >1.5</option>
+                        <option value= 0.5>0.5</option>
+                        <option value= 3>3</option>
+                        <option value= 1 >1</option>
+                        <option value= 2>2</option>
+                        <option value= 8>8</option>
+                        <option value= 5>5</option>
+                        <option value= 58>58</option>
+                        <option value= 10.5>10.5</option>
+                      </select>
+                </div>
+
+                <div class="col-md-3">
+                    <div>
+                        <div class="search-2"> <i class='bx bxs-map'></i> <input type="text" onkeyup="searchCourses()" id="nameOfOrganisation"
+                                placeholder="Training Organisation"> <button onclick="generateTable([])">Search</button> </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="show-data">
+            </div>
+            
+            <div id="map" class="map-responsive"></div>
+     </div>
+    
+<!-- scripts -->
+<script src="./script.js">
+ 
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+<script src="https://smtpjs.com/v3/smtp.js"></script>
+    
+
+</body>
+
+</html>

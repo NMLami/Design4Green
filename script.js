@@ -1,267 +1,4 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-        crossorigin="anonymous"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-
-    
-        body {
-            background-image: linear-gradient(to right top, #D91B23, #124FEB);
-            height: 100vh;
-            display: block;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #tableId{
-          margin: auto;
-          background-color: blanchedalmond;
-          border: 2px solid black;
-           border-collapse: collapse;
-        }
-        .search {
-            background-color: #fff;
-            padding: 4px;
-            border-radius: 5px
-        }
-
-        .search-1 {
-            position: relative;
-            width: 100%
-        }
-
-        .search-1 input {
-            height: 45px;
-            border: none;
-            width: 100%;
-            padding-left: 34px;
-            padding-right: 10px;
-            border-right: 2px solid #eee
-        }
-
-        .search-1 input:focus {
-            border-color: none;
-            box-shadow: none;
-            outline: none
-        }
-
-        .search-1 i {
-            position: absolute;
-            top: 12px;
-            left: 5px;
-            font-size: 24px;
-            color: #eee
-        }
-
-        ::placeholder {
-            color: #eee;
-            opacity: 1
-        }
-
-        .search-2 {
-            position: relative;
-            width: 100%
-        }
-
-        .search-2 input {
-            height: 45px;
-            border: none;
-            width: 100%;
-            padding-left: 18px;
-            padding-right: 100px
-        }
-
-        .search-2 input:focus {
-            border-color: none;
-            box-shadow: none;
-            outline: none
-        }
-
-        .search-2 i {
-            position: absolute;
-            top: 12px;
-            left: -10px;
-            font-size: 24px;
-            color: #eee
-        }
-
-        .search-2 button {
-            position: absolute;
-            right: 1px;
-            top: 0px;
-            border: none;
-            height: 45px;
-            background-color: red;
-            color: #fff;
-            width: 90px;
-            border-radius: 4px
-        }
-        
-
-        @media (max-width:800px) {
-            .search-1 input {
-                border-right: none;
-                border-bottom: 1px solid #eee
-            }
-
-            .search-2 i {
-                left: 4px
-            }
-
-            .search-2 input {
-                padding-left: 34px
-            }
-
-            .search-2 button {
-                height: 37px;
-                top: 5px
-            }
-          
-        }
-    </style>
-</head>
-
-<body>
-<div>
-    <nav class="navbar navbar-light bg-light justify-content-between">
-        <a class="navbar-brand">D4G</a>
-        <form class="form-inline">
-            <!-- Button trigger modal -->
-       
-        <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="showCart()">
-            Cart <span class='cart-counter'> 0 </span>
-        </button>
-        </form>
-      </nav>
-    </div>
-
-  
-  <!-- Modal -->
-  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" >
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">Cart</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-           
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" onclick = sendMail()>Email Send</button>
-          <button type="button" class="btn btn-primary" onclick = genPDF()>PDF</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal for details -->
-  <div class="modal fade" id="staticBackdrop1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" >
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">You have selected</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-           
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Understood</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-    <div class="container" style="margin: 5;">
-        <div class="search">
-            <div class="row">
-                <div class="col-md-3">
-                      <select style="border: 0; outline:0 ;padding-bottom: 1.3pc ;" class=" search-1" name="continuingOrInitialTraining search-1" id = "continuingOrInitital"required onclick="searchCourses()">
-                        <option value=" " > Continuing / initial training</option>
-                        <option value="Continuing Education">Continuing Education</option>
-                        <option value="Initial training">Initial training</option>
-                      </select>
-                </div>
-                <div class="col-md-3">
-                    <select style="border: 0; outline:0 ;padding-bottom: 1.3pc ;" class=" search-1" name="location search-1" id = "location"required onclick="searchCourses()">
-                        <option value=" " > Choose Location</option>
-                        <option value="National">National(USA)</option>
-                        <option value="Toulouse">Toulouse(FRA)</option>
-                        <option value="Boulogne-Billancourt">Boulogne-Billancourt(FRA)</option>
-                        <option value="Paris">Paris(FRA)</option>
-                        <option value="All of France">All of France</option>
-                        <option value="La Bernardière">La Bernardière(FRA)</option>
-                        <option value="Versailles">Versailles(FRA)</option>
-                        <option value="Puteaux-La défense">Puteaux-La défense(FRA)</option>
-                        <option value="Saint-Barthélemy d'Anjou">Saint-Barthélemy d'Anjou(FRA)</option>
-                        <option value="Anglet">Anglet(FRA)</option>
-                        <option value="Rouen">Rouen(FRA)</option>
-                        <option value="Bordeaux">Bordeaux(FRA)</option>
-                        <option value="Lille">Lille(FRA)</option>
-                        <option value="Évry">Évry(FRA)</option>
-                        <option value="La Rochelle">La Rochelle(FRA)</option>
-                        <option value="Albi">Albi(FRA)</option>
-                        <option value="Montpellier">Montpellier(FRA)</option>
-                        <option value="Ales">Ales(FRA)</option>
-                        <option value="Saint-Étienne">Saint-Étienne(FRA)</option>
-                        <option value="Nantes">Nantes(FRA)</option>
-                        <option value="Levallois-Perret">Levallois-Perret(FRA)</option>
-                        <option value="Mulhouse">Mulhouse(FRA)</option>
-                        <option value="Pontoise">Pontoise(FRA)</option>
-                        <option value="SAINT MALO">SAINT MALOFRA)</option>
-                        <option value="Lyon">Lyon(FRA)</option>
-                        <option value="Rouen">Rouen(FRA)</option>
-                        <option value="Rennes">Rennes(FRA)</option>
-                        <option value="Saint-Etienne-de-Montluc">Saint-Etienne-de-Montluc(FRA)</option>
-                        <option value="Morlaix">Morlaix(FRA)</option>
-                        <option value="Lyon">Lyon(FRA)</option>
-                      </select>
-                </div>
-
-                <div class="col-md-3">
-                    <select style="border: 0; outline:0 ;padding-bottom: 1.3pc ;" class=" search-1" name="duration search-1" id = "duration"required onclick="searchCourses()">
-                        <option value=" " > Choose Duration</option>
-                        <option value= 1.5 >1.5</option>
-                        <option value= 0.5>0.5</option>
-                        <option value= 3>3</option>
-                        <option value= 1 >1</option>
-                        <option value= 2>2</option>
-                        <option value= 8>8</option>
-                        <option value= 5>5</option>
-                        <option value= 58>58</option>
-                        <option value= 10.5>10.5</option>
-                      </select>
-                </div>
-
-                <div class="col-md-3">
-                    <div>
-                        <div class="search-2"> <i class='bx bxs-map'></i> <input type="text" onkeyup="searchCourses()" id="nameOfOrganisation"
-                                placeholder="Training Organisation"> <button onclick="generateTable([])">Search</button> </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="show-data">
-        
-    </div>
-    
-    <script>
-        
-            
-    
-    var sheet_data = [
+var courses = [
     {
      "id": 1,
      "continuingOrInitialTraining": "Continuing Education",
@@ -1522,7 +1259,7 @@
      "programCovers": "One or more modules \/ teaching units",
      "nameOfTheOrganisation": "TEMESIS",
      "titleOfTheCourse": "Understanding digital sustainability &amp; the digital eco-design approach",
-     "location": "Paris - France",
+     "location": "Paris",
      "priorLearning": "Assessment of knowledge acquired during the training course in the form of an interactive quiz\nEvaluation Questionnaire at the end of the session in which the participant evaluates the training inputs and his\/her ability to implement them",
      "duration": 1.5,
      "methodOfAccess": "face to face and distancial learning"
@@ -1600,20 +1337,158 @@
      "description": "The \"Information Systems and Social Responsibility\" session is part of a course module on good software development practices. The majority of the module is dedicated to good practices from a programming point of view (design patterns, SOLID principles) but 2 hours are dedicated to digital responsibility.",
      "url": "http:\/\/www.vcharpenay.link\/courses\/num-responsable.html"
     }
-   ];
+   ]
 
-  
+var markers = [
+    {
+      "name":"Paris",
+      "lat": 48.856613,
+      "lng": 2.352222
+    },
+    {
+      "name": "National",
+      "lat": 32.671200,
+      "lng": -117.106308
+    },
+    {
+      "name": "Boulogne-Billancourt",
+      "lat": 48.833830,
+      "lng": 2.243230
+    },
+    {
+        "name": "All of France",
+        "lat": 46.227638,
+        "lng": 2.213749
+    },
+    {
+        "name": "La Bernardière",
+        "lat": 47.050350,
+        "lng": -1.268110
+    },
+    {
+        "name": "Versailles",
+        "lat": 48.804867,
+        "lng": 2.120355
+    },
+    {
+        "name": "Puteaux-La défense",
+        "lat": 48.893470,
+        "lng": 2.240810
+    },
+    {
+        "name": "Saint-Barthélemy d'Anjou",
+        "lat": 47.468890,
+        "lng": -0.495140
+    },
+    {
+        "name": "Anglet",
+        "lat": 43.480358,
+        "lng": -1.515670
+    },
+    {
+        "name": "Rouen",
+        "lat": 49.443233,
+        "lng": 1.099971
+    },
+    {
+        "name": "Bordeaux",
+        "lat": 44.837788,
+        "lng": -0.579180
+    },
+    {
+        "name": "Lille",
+        "lat": 50.629250,
+        "lng": 3.057256
+    },
+    {
+        "name": "Évry",
+        "lat": 48.624748,
+        "lng": 2.430850
+    },
+    {
+        "name": "La Rochelle",
+        "lat": 46.1591126,
+        "lng": -1.1520434
+    },
+    {
+        "name": "Albi",
+        "lat": 43.9277552,
+        "lng": 2.147899
+    },
+    {
+        "name": "Montpellier",
+        "lat": 43.6112422,
+        "lng": 3.8767337
+    },
+    {
+        "name": "Ales",
+        "lat": 39.768245,
+        "lng": 8.815632
+    },
+    {
+        "name": "Saint-Étienne",
+        "lat": 45.4401467,
+        "lng": 4.3873058
+    },
+    {
+        "name": "Nantes",
+        "lat": 47.2186371,
+        "lng": -1.5541362
+    },
+    {
+        "name": "Levallois-Perret",
+        "lat": 48.892956,
+        "lng": 2.2881683
+    },
+    {
+        "name": "Mulhouse",
+        "lat": 47.7467233,
+        "lng": 7.3389937
+    },
+    {
+        "name": "Pontoise",
+        "lat": 49.0508845,
+        "lng": 2.1008067
+    },
+    {
+        "name": "SAINT MALO",
+        "lat": 48.649518,
+        "lng": -2.0260409
+    },
+    {
+        "name": "Lyon",
+        "lat": 45.7578137,
+        "lng": 4.8320114
+    },
+    {
+        "name": "Rouen",
+        "lat": 49.4404591,
+        "lng": 1.0939658
+    },
+    {
+        "name": "Rennes",
+        "lat": 48.1113387,
+        "lng": -1.6800198
+    },
+    {
+        "name": "Saint-Etienne-de-Montluc",
+        "lat": 47.2980648,
+        "lng": -1.7748386
+    },
+    {
+        "name": "Morlaix",
+        "lat": 48.5824932,
+        "lng": -3.8331972
+    }
+  ];
 
-//for(i=0;i< sheet_data.length ; i++){
-    
-   //console.log("location : ", sheet_data[i].location);
    
-   
-  
-//}
-//to generate table
+//----------------------------------------All Data------------------------------------
+var sheet_data = courses;
 
-  function generateTable(resultData) {
+
+   //Showing The data
+   const generateTable = (resultData) => {
 
     let final_data = [];
 
@@ -1623,44 +1498,50 @@
         final_data =[];
     }else final_data =sheet_data;
 
-    console.log("final_data", final_data)
     if( final_data.length <= 0){
         document.getElementsByClassName('show-data')[0].innerHTML = `<h1>No result Found</h1>`;
        
     }else{
-    // creates a <table> element and a <tbody> element
+
+    mapData(final_data);
+
     const tbl = document.createElement("table");
   
     const tblBody = document.createElement("tbody");
 
     const header = document.createElement("tr");
     const cellh = document.createElement("td");
-    const cellTexth = document.createTextNode(`location`);
-    
+    const cellTexth = document.createTextNode(`Location`);
+    cellh.setAttribute('class','fs-5 fw-bold')
+
     cellh.appendChild(cellTexth);
     header.appendChild(cellh)
 
     const cellh1 = document.createElement("td");
-    const cellTexth1 = document.createTextNode(`continuingOrInitialTraining`);
+    const cellTexth1 = document.createTextNode(`Contuning Or Initial`);
+    cellh1.setAttribute('class','fw-bold')
 
     cellh1.appendChild(cellTexth1);
     header.appendChild(cellh1);
 ///
     const cellh2 = document.createElement("td");
-    const cellTexth2 = document.createTextNode(`nameOfTheOrganisation`);
-    
+    const cellTexth2 = document.createTextNode(`Organisation Name`);
+    cellh2.setAttribute('class','fw-bold')
+
     cellh2.appendChild(cellTexth2);
     header.appendChild(cellh2);
 ///
     const cellh3 = document.createElement("td");
     const cellTexth3 = document.createTextNode(`Duration`);
+    cellh3.setAttribute('class','fw-bold')
 
     cellh3.appendChild(cellTexth3);
     header.appendChild(cellh3);
     
 ///
     const cellh4 = document.createElement("td");
-    const cellTexth4 = document.createTextNode(` wishlist`);
+    const cellTexth4 = document.createTextNode(`Wishlist`);
+    cellh4.setAttribute('class','fw-bold')
 
     cellh4.appendChild(cellTexth4);
     header.appendChild(cellh4);
@@ -1671,28 +1552,25 @@
     for (let i = 0; i < final_data.length; i++) {
       // creates a table row
       const row = document.createElement("tr");
-      
-     // for (let j = 0; j < 1; j++) {
-        // Create a <td> element and a text node, make the text
-        // node the contents of the <td>, and put the <td> at
-        // the end of the table row
+
         const cell = document.createElement("td");
-        const cellText = document.createTextNode(`${final_data[i].location || " "}`);
+        const cellText = document.createTextNode(`${final_data[i].location || "-"}`);
 
         const cell1 = document.createElement("td");
-        const cellText1 = document.createTextNode(`${final_data[i].continuingOrInitialTraining || " "}`);
+        const cellText1 = document.createTextNode(`${final_data[i].continuingOrInitialTraining || "Other"}`);
 
         const cell2 = document.createElement("td");
-        const cellText2 = document.createTextNode(`${final_data[i].nameOfTheOrganisation || " "}`);
+        const cellText2 = document.createTextNode(`${final_data[i].nameOfTheOrganisation || "Other"}`);
 
         const cell3 = document.createElement("td"); 
-        const cellText3 = document.createTextNode(`${final_data[i].duration || " "}`);
+        const cellText3 = document.createTextNode(`${final_data[i].duration || "-"}`);
 
         const cell4 = document.createElement("button");
         cell4.setAttribute("id", `${final_data[i].id}`);
         cell4.setAttribute("name", `${final_data[i].titleOfTheCourse || " "}`);
+        cell4.setAttribute("class", `btn btn-success`);
       //  const cellValue4 = document.value(`${sheet_data[i].titleOfTheCourse || " "}`);
-        const cellText4 = document.createTextNode(`cart`);
+        const cellText4 = document.createTextNode(`Cart`);
 
         //add to cart button.
         cell4.addEventListener('click', function handleclick(e) {
@@ -1700,9 +1578,7 @@
             const courseName = e.target.name;
             addtoCart(courseId, courseName);
         });
-        //const cellText3 = document.createTextNode("<br>"+`--------------`);
-        //,${sheet_data[j].titleOfTheCourse}, ${sheet_data[i].location}
-        //const cellText = document.createTextNode(`cell in row ${sheet_data[i].location}, column ${sheet_data[j]}`);
+
         cell.appendChild(cellText);
         cell1.appendChild(cellText1);
         cell2.appendChild(cellText2);
@@ -1735,11 +1611,10 @@
   }
  
   
-  function showCart() {
+  const showCart=()=> {
     //reset modal values
     document.getElementsByClassName('modal-body')[0].innerHTML = '' ;
     const cartContents = JSON.parse(getDb());
-    console.log(cartContents,1111111111);
 
     const tbl = document.createElement("table");
   
@@ -1780,8 +1655,8 @@
 
 
         cell.appendChild(cellText);
-         cell1.appendChild(cellText1);
-         cell2.appendChild(cellText2);
+        cell1.appendChild(cellText1);
+        cell2.appendChild(cellText2);
 
         row.appendChild(cell);
        row.appendChild(cell1);
@@ -1795,19 +1670,16 @@
     tbl.appendChild(tblBody);
 //     // appends <table> into <body>
     document.getElementsByClassName('modal-body')[0].appendChild(tbl);
-//     // sets the border attribute of tbl to '2'
     
     tbl.setAttribute("align", "center");
     tbl.setAttribute("id", "tableId");
 }
 
-function searchCourses(){
+const searchCourses =()=>{
     const continueOrInitial = document.getElementById('continuingOrInitital').value;
     const location = document.getElementById('location').value;
     const duration = document.getElementById('duration').value;
     const nameOfOrganisation = document.getElementById('nameOfOrganisation').value;
-
-    console.log(location ,continueOrInitial, duration, nameOfOrganisation)
 
     let filteredCourse = [];
     let reFilterCourse = [];
@@ -1824,7 +1696,6 @@ function searchCourses(){
         reFilterCourse = [];
         for(i=0 ; i< filteredCourse.length; i++){
             if(filteredCourse[i].continuingOrInitialTraining && filteredCourse[i].continuingOrInitialTraining.includes(continueOrInitial)){
-                console.log(11111111111111)
                 reFilterCourse.push(filteredCourse[i]);
             }
          }
@@ -1835,8 +1706,6 @@ function searchCourses(){
          reFilterCourse = [];
     }
     }
-
-    console.log("filteredCourse 1", filteredCourse)
 
    if(location !== " "){
         if(filteredCourse.length <= 0){
@@ -1886,21 +1755,28 @@ function searchCourses(){
     }
     }
 
-   console.log(nameOfOrganisation)
     if(nameOfOrganisation !== ""){
         if(filteredCourse.length <= 0){
         for(i=0 ; i< sheet_data.length; i++){
-            if(sheet_data[i].nameOfTheOrganisation && sheet_data[i].nameOfTheOrganisation.includes(nameOfOrganisation)){
+            if(sheet_data[i].nameOfTheOrganisation){
+            const orgnisationName = sheet_data[i].nameOfTheOrganisation.toLowerCase();
+          
+            if(orgnisationName.includes(nameOfOrganisation.toLowerCase())){
                 filteredCourse.push(sheet_data[i]);
             }
+        }
         }
     }else{
         reFilterCourse = [];
         for(i=0 ; i< filteredCourse.length; i++){
-            if(filteredCourse[i].nameOfTheOrganisation && filteredCourse[i].nameOfTheOrganisation.includes(nameOfOrganisation)){
+            if(filteredCourse[i].nameOfTheOrganisation){
+            const orgnisationName = sheet_data[i].nameOfTheOrganisation.toLowerCase();
+          
+            if(orgnisationName.includes(nameOfOrganisation.toLowerCase())){
                 reFilterCourse.push(filteredCourse[i]);
             }
          }
+        }
          
          if(reFilterCourse.length == 0){ // if result is zero then  no result
             flag=1;
@@ -1911,8 +1787,7 @@ function searchCourses(){
     }
     }
 
-    
-    console.log(flag);
+
     if(flag == 1) generateTable([-1])
     else if(flag == 0 && filteredCourse.length>0){
             generateTable(filteredCourse);
@@ -1920,10 +1795,48 @@ function searchCourses(){
    
 }
 
-function showDetails(id){
+
+  //for map
+  const  mapData = (data)=> {
     
+    var container = L.DomUtil.get('map');
+      if(container != null){
+        container._leaflet_id = null;
+      }
+
+    var map = L.map('map', {
+        center: [20.0, 5.0],
+        minZoom: 2,
+        zoom: 3
+    });
+ 
+    L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        subdomains: ['a', 'b', 'c']
+    }).addTo(map);
+
+    for (var i = 0; i < data.length; i++) { //loop for place
+            var place = data[i].location;
+     
+        for(coordinate of markers){
+            
+            if(coordinate.name == place){
+                longitude = coordinate.lng
+                latitude = coordinate.lat
+                
+                L.marker([latitude, longitude]).addTo(map);
+
+            }
+        }
+
+        }
+       
+       
+    }
+    
+    const showDetails = (id) =>{ 
     for(i=0;i< sheet_data.length;i++){
-        if(sheet_data[i].id == id){ //something is string here find before submitting ===
+        if(sheet_data[i].id == id){ 
             var div = document.createElement('div');
 
             div.innerHTML = `
@@ -1949,7 +1862,7 @@ function showDetails(id){
 }
 
 
-function sendMail() {
+const sendMail =()=> {
  const contents = JSON.parse(getDb());
 
  if(Object.keys(contents) && Object.keys(contents).length > 0){
@@ -1963,52 +1876,14 @@ function sendMail() {
     Subject : "Test email",
     Body : "<html><h2>Header</h2><strong>Bold text</strong><br></br><em>Italic</em></html>"
 }).then(
-  message => alert(message)
+  message => alert("Mail has Been sent")
 );
-//   const myHeaders = new Headers();
-//   myHeaders.append("Content-Type", "application/json");
-//   myHeaders.set('Authorization', 'Basic ' + btoa('a456b876698612f536aef94da7c4cf14'+":" +'10554839f57293fc569e256e3c0fcb06'));
 
-//   console.log(btoa('a456b876698612f536aef94da7c4cf14'+":" +'10554839f57293fc569e256e3c0fcb06'))
-//   const data = JSON.stringify({
-//     "Messages": [{
-//       "From": {"Email": "nafilmahmud@iut-dhaka.edu", "Name": "Nafil"},
-//       "To": [{"Email": "sinchowa@gmail.com", "Name": "Chowa"}],
-//       "Subject": "Ghum Parani Mashi pishi",
-//       "TextPart": `<p>${contents}<p>`
-//     }]
-//   });
-  //const encode = btoa(unescape(encodeURIComponent('a456b876698612f536aef94da7c4cf14'+":" +'10554839f57293fc569e256e3c0fcb06')))
-  //btoa();
-//   const requestOptions = {
-//     method: 'POST',
-//     body: data,
-//     mode:"no-cors",
-//     Authorization: `Basic ${encode}` ,
-//     headers: {
-//                 'Content-Type': 'application/json',
-//             }
-//   };
-
-//   fetch("https://api.mailjet.com/v3.1/send", {
-//     method: 'POST',
-//     mode:"no-cors",
-//     authorization: 'Basic ' + btoa('a456b876698612f536aef94da7c4cf14'+":" +'10554839f57293fc569e256e3c0fcb06'),
-//     headers: {
-//                 'Content-Type': 'application/json',
-//             },
-//     body: data
-//   })
-//     .then(response => response.text())
-//     .then(result => console.log(result))
-//     .catch(error => console.log('error', error));
-
-   }
+    }
 }
 
 
-  
-  function addtoCart(id, name) {
+const addtoCart = (id, name) =>{
   const exists = getDb();
   let course_cart = {};
   if (exists) {
@@ -2041,7 +1916,7 @@ const removeFromDb = id => {
   }
 }   
 
-const getDb = () => localStorage.getItem('course_cart');
+const getDb = () => localStorage.getItem('course_cart') || 0;
 
 const getStoredCart = () => {
   const exists = getDb();
@@ -2064,9 +1939,10 @@ document.addEventListener("click", function(){
 window.onload = function(){
     var counts = Object.keys(JSON.parse(getDb())).length || 0;
     var x= document.getElementsByClassName("cart-counter")[0].innerHTML =`${JSON.parse(counts)}`;
+  
 }
 
-function genPDF() {
+const genPDF=()=> {
 
     let mywindow = window.open('', 'PRINT', 'height=650,width=900,top=100,left=150');
          const contents = JSON.parse(getDb());
@@ -2088,12 +1964,3 @@ function genPDF() {
 
         
     }
-</script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
-<script src="https://smtpjs.com/v3/smtp.js"></script>
-    
-
-</body>
-
-</html>
