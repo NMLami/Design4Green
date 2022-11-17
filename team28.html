@@ -148,7 +148,7 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">You have selected</h5>
+          <h5 class="modal-title" id="staticBackdropLabel">Cart</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -156,7 +156,8 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Understood</button>
+          <button type="button" class="btn btn-primary" onclick = sendMail()>Email Send</button>
+          <button type="button" class="btn btn-primary" onclick = genPDF()>PDF</button>
         </div>
       </div>
     </div>
@@ -196,7 +197,7 @@
                         <option value=" " > Choose Location</option>
                         <option value="National">National(USA)</option>
                         <option value="Toulouse">Toulouse(FRA)</option>
-                        <option value="Boulogne-Billancourt<">Boulogne-Billancourt(FRA)</option>
+                        <option value="Boulogne-Billancourt">Boulogne-Billancourt(FRA)</option>
                         <option value="Paris">Paris(FRA)</option>
                         <option value="All of France">All of France</option>
                         <option value="La Bernardière">La Bernardière(FRA)</option>
@@ -228,14 +229,24 @@
                 </div>
 
                 <div class="col-md-3">
-                    <div class="search-1"> <i class='bx bx-search-alt'></i> <input type="text"
-                            placeholder="Duration"> </div>
+                    <select style="border: 0; outline:0 ;padding-bottom: 1.3pc ;" class=" search-1" name="duration search-1" id = "duration"required onclick="searchCourses()">
+                        <option value=" " > Choose Duration</option>
+                        <option value= 1.5 >1.5</option>
+                        <option value= 0.5>0.5</option>
+                        <option value= 3>3</option>
+                        <option value= 1 >1</option>
+                        <option value= 2>2</option>
+                        <option value= 8>8</option>
+                        <option value= 5>5</option>
+                        <option value= 58>58</option>
+                        <option value= 10.5>10.5</option>
+                      </select>
                 </div>
 
                 <div class="col-md-3">
                     <div>
-                        <div class="search-2"> <i class='bx bxs-map'></i> <input type="text"
-                                placeholder="Training Organisation"> <button onclick="searchCourses()">Search</button> </div>
+                        <div class="search-2"> <i class='bx bxs-map'></i> <input type="text" onkeyup="searchCourses()" id="nameOfOrganisation"
+                                placeholder="Training Organisation"> <button onclick="generateTable([])">Search</button> </div>
                     </div>
                 </div>
             </div>
@@ -1590,7 +1601,6 @@
      "url": "http:\/\/www.vcharpenay.link\/courses\/num-responsable.html"
     }
    ];
-var demo = document.getElementById("demo");
 
   
 
@@ -1611,8 +1621,8 @@ var demo = document.getElementById("demo");
         final_data = resultData;
     }else if(resultData[0] == -1){ // search empty
         final_data =[];
-    }
-    else final_data =sheet_data;
+    }else final_data =sheet_data;
+
     console.log("final_data", final_data)
     if( final_data.length <= 0){
         document.getElementsByClassName('show-data')[0].innerHTML = `<h1>No result Found</h1>`;
@@ -1729,7 +1739,7 @@ var demo = document.getElementById("demo");
     //reset modal values
     document.getElementsByClassName('modal-body')[0].innerHTML = '' ;
     const cartContents = JSON.parse(getDb());
-   // console.log(cartContents,1111111111);
+    console.log(cartContents,1111111111);
 
     const tbl = document.createElement("table");
   
@@ -1758,11 +1768,24 @@ var demo = document.getElementById("demo");
             showDetails(courseId);
         });
 
+        const cell2 = document.createElement("button");
+       cell2.setAttribute("id", `${Object.keys(cartContents)[i]}`);
+       const cellText2 = document.createTextNode(`remove`);
+       cell2.setAttribute("class", `btn btn-outline-dark`);
+        //delete to cart button.
+        cell2.addEventListener('click', function handleclick(e) {
+            const courseId = e.target.id;
+            removeFromDb(courseId);
+        });
+
+
         cell.appendChild(cellText);
          cell1.appendChild(cellText1);
+         cell2.appendChild(cellText2);
 
         row.appendChild(cell);
        row.appendChild(cell1);
+       row.appendChild(cell2);
 
 //       // add the row to the end of the table body
       tblBody.appendChild(row);
@@ -1781,9 +1804,14 @@ var demo = document.getElementById("demo");
 function searchCourses(){
     const continueOrInitial = document.getElementById('continuingOrInitital').value;
     const location = document.getElementById('location').value;
-    console.log(location ,continueOrInitial)
+    const duration = document.getElementById('duration').value;
+    const nameOfOrganisation = document.getElementById('nameOfOrganisation').value;
+
+    console.log(location ,continueOrInitial, duration, nameOfOrganisation)
+
     let filteredCourse = [];
     let reFilterCourse = [];
+    let flag =0 ;
 
     if(continueOrInitial !== " "){
         if(filteredCourse.length <= 0){
@@ -1793,18 +1821,24 @@ function searchCourses(){
             }
         }
     }else{
+        reFilterCourse = [];
         for(i=0 ; i< filteredCourse.length; i++){
             if(filteredCourse[i].continuingOrInitialTraining && filteredCourse[i].continuingOrInitialTraining.includes(continueOrInitial)){
+                console.log(11111111111111)
                 reFilterCourse.push(filteredCourse[i]);
             }
+         }
+         if(reFilterCourse.length == 0){
+            flag=1;
          }
          filteredCourse = reFilterCourse;
          reFilterCourse = [];
     }
     }
-    console.log(filteredCourse);
+
+    console.log("filteredCourse 1", filteredCourse)
+
    if(location !== " "){
-    console.log(location);
         if(filteredCourse.length <= 0){
         for(i=0 ; i< sheet_data.length; i++){
             if(sheet_data[i].location && sheet_data[i].location.includes(location)){
@@ -1812,19 +1846,77 @@ function searchCourses(){
             }
         }
     }else{
+        reFilterCourse = [];
         for(i=0 ; i< filteredCourse.length; i++){
             if(filteredCourse[i].location && filteredCourse[i].location.includes(location)){
                 reFilterCourse.push(filteredCourse[i]);
             }
          }
+         
+         if(reFilterCourse.length == 0){ // if result is zero then  no result
+            flag=1;
+         }
+
          filteredCourse = reFilterCourse;
          reFilterCourse = [];
     }
     }
-    console.log(filteredCourse.length)
-        if(filteredCourse.length>0){
+
+
+    if(duration !== " "){
+   
+        if(filteredCourse.length <= 0){
+        for(i= 0 ; i< sheet_data.length; i++){
+            if(sheet_data[i].duration && sheet_data[i].duration == duration){
+                filteredCourse.push(sheet_data[i]);
+            }
+        }
+    }else{
+        reFilterCourse = [];
+        for(i=0 ; i< filteredCourse.length; i++){
+            if(filteredCourse[i].duration && filteredCourse[i].duration == duration){
+                reFilterCourse.push(filteredCourse[i]);
+            }
+         }
+         if(reFilterCourse.length == 0){ // if result is zero then  no result
+            flag=1;
+         }
+         filteredCourse = reFilterCourse;
+         reFilterCourse = [];
+    }
+    }
+
+   console.log(nameOfOrganisation)
+    if(nameOfOrganisation !== ""){
+        if(filteredCourse.length <= 0){
+        for(i=0 ; i< sheet_data.length; i++){
+            if(sheet_data[i].nameOfTheOrganisation && sheet_data[i].nameOfTheOrganisation.includes(nameOfOrganisation)){
+                filteredCourse.push(sheet_data[i]);
+            }
+        }
+    }else{
+        reFilterCourse = [];
+        for(i=0 ; i< filteredCourse.length; i++){
+            if(filteredCourse[i].nameOfTheOrganisation && filteredCourse[i].nameOfTheOrganisation.includes(nameOfOrganisation)){
+                reFilterCourse.push(filteredCourse[i]);
+            }
+         }
+         
+         if(reFilterCourse.length == 0){ // if result is zero then  no result
+            flag=1;
+         }
+
+         filteredCourse = reFilterCourse;
+         reFilterCourse = [];
+    }
+    }
+
+    
+    console.log(flag);
+    if(flag == 1) generateTable([-1])
+    else if(flag == 0 && filteredCourse.length>0){
             generateTable(filteredCourse);
-        }else generateTable([-1])
+    }else(generateTable([-1]))
    
 }
 
@@ -1856,6 +1948,65 @@ function showDetails(id){
     }
 }
 
+
+function sendMail() {
+ const contents = JSON.parse(getDb());
+
+ if(Object.keys(contents) && Object.keys(contents).length > 0){
+
+    Email.send({
+    Host : "smtp.elasticemail.com",
+    Username : "nafilmahmud@iut-dhaka.edu",
+    Password : "FE2AECDBFE2FD5AC2C86A907CD76E20417C0",
+    To : 'nafillami@gmail.com',
+    From : "nafilmahmud@iut-dhaka.edu",
+    Subject : "Test email",
+    Body : "<html><h2>Header</h2><strong>Bold text</strong><br></br><em>Italic</em></html>"
+}).then(
+  message => alert(message)
+);
+//   const myHeaders = new Headers();
+//   myHeaders.append("Content-Type", "application/json");
+//   myHeaders.set('Authorization', 'Basic ' + btoa('a456b876698612f536aef94da7c4cf14'+":" +'10554839f57293fc569e256e3c0fcb06'));
+
+//   console.log(btoa('a456b876698612f536aef94da7c4cf14'+":" +'10554839f57293fc569e256e3c0fcb06'))
+//   const data = JSON.stringify({
+//     "Messages": [{
+//       "From": {"Email": "nafilmahmud@iut-dhaka.edu", "Name": "Nafil"},
+//       "To": [{"Email": "sinchowa@gmail.com", "Name": "Chowa"}],
+//       "Subject": "Ghum Parani Mashi pishi",
+//       "TextPart": `<p>${contents}<p>`
+//     }]
+//   });
+  //const encode = btoa(unescape(encodeURIComponent('a456b876698612f536aef94da7c4cf14'+":" +'10554839f57293fc569e256e3c0fcb06')))
+  //btoa();
+//   const requestOptions = {
+//     method: 'POST',
+//     body: data,
+//     mode:"no-cors",
+//     Authorization: `Basic ${encode}` ,
+//     headers: {
+//                 'Content-Type': 'application/json',
+//             }
+//   };
+
+//   fetch("https://api.mailjet.com/v3.1/send", {
+//     method: 'POST',
+//     mode:"no-cors",
+//     authorization: 'Basic ' + btoa('a456b876698612f536aef94da7c4cf14'+":" +'10554839f57293fc569e256e3c0fcb06'),
+//     headers: {
+//                 'Content-Type': 'application/json',
+//             },
+//     body: data
+//   })
+//     .then(response => response.text())
+//     .then(result => console.log(result))
+//     .catch(error => console.log('error', error));
+
+   }
+}
+
+
   
   function addtoCart(id, name) {
   const exists = getDb();
@@ -1886,6 +2037,7 @@ const removeFromDb = id => {
     const course_cart = JSON.parse(exists);
     delete course_cart[id];
     updateDb(course_cart);
+    showCart()
   }
 }   
 
@@ -1911,10 +2063,35 @@ document.addEventListener("click", function(){
 
 window.onload = function(){
     var counts = Object.keys(JSON.parse(getDb())).length || 0;
-     var x= document.getElementsByClassName("cart-counter")[0].innerHTML =`${JSON.parse(counts)}`;
+    var x= document.getElementsByClassName("cart-counter")[0].innerHTML =`${JSON.parse(counts)}`;
 }
 
+function genPDF() {
+
+    let mywindow = window.open('', 'PRINT', 'height=650,width=900,top=100,left=150');
+         const contents = JSON.parse(getDb());
+        mywindow.document.write(`<html><head><title>Design For Green </title>`);
+        mywindow.document.write(`</head><body style="align :center;"> YOU have Ordered`);
+          for(i=0; i < Object.keys(contents).length; i++){
+            mywindow.document.write(` ${Object.values(contents)[i]} <br>`)
+            
+        }
+        mywindow.document.write('</body></html>');
+
+        mywindow.document.close(); // necessary for IE >= 10
+        mywindow.focus(); // necessary for IE >= 10*/
+
+        mywindow.print();
+        mywindow.close();
+
+        return true;
+
+        
+    }
 </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+<script src="https://smtpjs.com/v3/smtp.js"></script>
     
 
 </body>
