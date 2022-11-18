@@ -1770,8 +1770,7 @@ const searchCourses =()=>{
         reFilterCourse = [];
         for(i=0 ; i< filteredCourse.length; i++){
             if(filteredCourse[i].nameOfTheOrganisation){
-            const orgnisationName = sheet_data[i].nameOfTheOrganisation.toLowerCase();
-          
+                 const orgnisationName = filteredCourse[i].nameOfTheOrganisation.toLowerCase();
             if(orgnisationName.includes(nameOfOrganisation.toLowerCase())){
                 reFilterCourse.push(filteredCourse[i]);
             }
@@ -1805,8 +1804,8 @@ const searchCourses =()=>{
       }
 
     var map = L.map('map', {
-        center: [20.0, 5.0],
-        minZoom: 2,
+        center: [50.0, 5.0],
+        minZoom: 1,
         zoom: 3
     });
  
