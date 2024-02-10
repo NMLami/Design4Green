@@ -1891,7 +1891,7 @@ function sendMail() {
 
   const myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
-  myHeaders.append('api-key',"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")
+  myHeaders.append('api-key',"---")
   myHeaders.append("accept", "application/json");
  
 
